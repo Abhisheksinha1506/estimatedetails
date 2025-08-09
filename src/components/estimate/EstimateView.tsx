@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
+import { Accordion } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
-import { Eye } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { EstimateHeader } from "./EstimateHeader";
+import { SectionPanel } from "./SectionPanel";
+import { currency } from "./types";
 
 // Types inferred from the mock API
 interface ApiItem {
@@ -36,25 +37,8 @@ interface ApiResponse {
   sections?: ApiSection[];
 }
 
-// UI types after transformation
-interface UIItem {
-  id: string;
-  type: string;
-  name: string;
-  qty: number;
-  unit: string;
-  unitCost: number; // original value (not cents)
-  tax: boolean;
-  costCode?: string;
-}
-
-interface UISection {
-  id: string;
-  name: string;
-  items: UIItem[];
-}
-
-const currency = new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" });
+import type { UIItem, UISection } from "./types";
+// currency formatter moved to ./types
 
 const divideCents = (value: number | undefined) => (typeof value === "number" ? value / 100 : 0);
 
@@ -62,6 +46,26 @@ export default function EstimateView() {
   const [sections, setSections] = useState<UISection[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [openSections, setOpenSections] = useState<string[]>([]);
+
+  // SEO: page title, meta description, canonical
+  useEffect(() => {
+    document.title = "Estimate - Live Totals";
+    const meta = document.querySelector('meta[name="description"]') || (() => {
+      const m = document.createElement('meta');
+      m.setAttribute('name', 'description');
+      document.head.appendChild(m);
+      return m;
+    })();
+    meta.setAttribute('content', 'Estimate sections with inline editing, instant totals, and grand total.');
+    const canonical = document.querySelector('link[rel="canonical"]') || (() => {
+      const l = document.createElement('link');
+      l.setAttribute('rel', 'canonical');
+      document.head.appendChild(l);
+      return l;
+    })();
+    canonical.setAttribute('href', window.location.href);
+  }, []);
 
   useEffect(() => {
     let ignore = false;
@@ -121,9 +125,31 @@ export default function EstimateView() {
 
   if (loading) {
     return (
-      <main className="container py-10">
-        <h1 className="text-3xl font-semibold mb-4">Estimate</h1>
-        <p className="text-muted-foreground">Loading estimate…</p>
+      <main className="container py-10 space-y-6">
+        <div className="sticky top-0 z-20 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+          <div className="flex items-end justify-between py-4">
+            <div>
+              <Skeleton className="h-6 w-32" />
+              <div className="mt-2"><Skeleton className="h-4 w-64" /></div>
+            </div>
+            <div className="text-right">
+              <Skeleton className="h-4 w-24" />
+              <div className="mt-2"><Skeleton className="h-8 w-40" /></div>
+            </div>
+          </div>
+        </div>
+        <div className="space-y-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="rounded-md border p-4">
+              <Skeleton className="h-5 w-48" />
+              <div className="mt-4 space-y-2">
+                <Skeleton className="h-9 w-full" />
+                <Skeleton className="h-9 w-full" />
+                <Skeleton className="h-9 w-3/4" />
+              </div>
+            </div>
+          ))}
+        </div>
       </main>
     );
   }
@@ -139,90 +165,24 @@ export default function EstimateView() {
 
   return (
     <main className="container py-8 space-y-6">
-      <header className="flex items-end justify-between">
-        <div>
-          <h1 className="text-3xl font-semibold">Estimate</h1>
-          <p className="text-sm text-muted-foreground">Inline editable quantities and unit costs with instant totals.</p>
-        </div>
-        <div className="text-right">
-          <div className="text-sm text-muted-foreground">Grand Total</div>
-          <div className="text-3xl font-bold">{currency.format(grandTotal)}</div>
-        </div>
-      </header>
+      <EstimateHeader
+        grandTotal={grandTotal}
+        onExpandAll={() => setOpenSections(sections.map((s) => s.id))}
+        onCollapseAll={() => setOpenSections([])}
+      />
 
       <Separator />
 
-      <Accordion type="multiple" className="w-full">
+      <Accordion type="multiple" className="w-full" value={openSections} onValueChange={(v) => setOpenSections(Array.isArray(v) ? v : [])}>
         {sections.map((sec) => (
-          <AccordionItem value={sec.id} key={sec.id}>
-            <AccordionTrigger className="px-3">
-              <div className="flex w-full items-center justify-between">
-                <div className="font-medium">{sec.name}</div>
-                <div className="text-muted-foreground">{currency.format(sectionTotal(sec))}</div>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="whitespace-nowrap">Type</TableHead>
-                      <TableHead className="min-w-[320px]">Item Name</TableHead>
-                      <TableHead className="w-[120px] text-right">QTY</TableHead>
-                      <TableHead className="w-[160px] text-right">Unit Cost</TableHead>
-                      <TableHead className="w-[120px]">Unit</TableHead>
-                      <TableHead className="w-[160px] text-right">Total</TableHead>
-                      <TableHead className="w-[80px] text-center">Tax</TableHead>
-                      <TableHead className="min-w-[220px]">Cost Code</TableHead>
-                      <TableHead className="w-[60px]"></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {sec.items.map((it) => {
-                      const itemTotal = Number(it.qty || 0) * Number(it.unitCost || 0);
-                      return (
-                        <TableRow key={it.id}>
-                          <TableCell className="font-mono text-xs">{it.type}</TableCell>
-                          <TableCell>{it.name}</TableCell>
-                          <TableCell className="text-right">
-                            <Input
-                              aria-label={`Quantity for ${it.name}`}
-                              inputMode="numeric"
-                              type="number"
-                              className="h-9 text-right"
-                              value={Number.isFinite(it.qty) ? it.qty : 0}
-                              onChange={(e) => updateQty(sec.id, it.id, Number(e.target.value))}
-                              onKeyUp={(e) => updateQty(sec.id, it.id, Number((e.target as HTMLInputElement).value))}
-                              min={0}
-                              step={1}
-                            />
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <Input
-                              aria-label={`Unit cost for ${it.name}`}
-                              inputMode="decimal"
-                              type="number"
-                              className="h-9 text-right"
-                              value={Number.isFinite(it.unitCost) ? it.unitCost : 0}
-                              onChange={(e) => updateUnitCost(sec.id, it.id, Number(e.target.value))}
-                              onKeyUp={(e) => updateUnitCost(sec.id, it.id, Number((e.target as HTMLInputElement).value))}
-                              min={0}
-                              step={0.01}
-                            />
-                          </TableCell>
-                          <TableCell>{it.unit}</TableCell>
-                          <TableCell className="text-right">{currency.format(itemTotal)}</TableCell>
-                          <TableCell className="text-center">{it.tax ? "✓" : ""}</TableCell>
-                          <TableCell className="truncate" title={it.costCode}>{it.costCode}</TableCell>
-                          <TableCell className="text-right"><Eye className="inline-block h-4 w-4" aria-hidden /></TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+          <SectionPanel
+            key={sec.id}
+            section={sec}
+            currency={currency}
+            sectionTotal={sectionTotal}
+            updateQty={updateQty}
+            updateUnitCost={updateUnitCost}
+          />
         ))}
       </Accordion>
     </main>
