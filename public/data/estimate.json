@@ -1,0 +1,27 @@
+{
+  "section": [
+    {
+      "id": "sec-1",
+      "name": "Custom Section",
+      "items": [
+        {"id":"i-1","type":"MTL","name":"0-10 GPH Adjustable Dripper On","qty":5,"unit_cost":5024,"unit":"EA","tax":true,"cost_code":"Planting Irrigation","total":33410},
+        {"id":"i-2","type":"MTL","name":"#8511 N95 DUST MASM 10/BOX","qty":5,"unit_cost":0,"unit":"pcs","tax":true,"cost_code":"","total":0},
+        {"id":"i-3","type":"EQUIP","name":"02-Feb-2023 - Change Order Request Item - Beta 01","qty":5,"unit_cost":10000,"unit":"Kg","tax":false,"cost_code":"","total":67000},
+        {"id":"i-4","type":"EQUIP","name":"02-Feb-2023 - Change Order Item - Beta 01","qty":5,"unit_cost":10000,"unit":"kg","tax":false,"cost_code":"","total":67000},
+        {"id":"i-5","type":"LBR","name":"24 cm. Thick Ribbed HCB (Hollow Cement Block)","qty":5,"unit_cost":1548,"unit":"pcs","tax":false,"cost_code":"","total":50697},
+        {"id":"i-6","type":"LBR","name":"20 cm. Thick HCB (Hollow Cement Block)","qty":5,"unit_cost":1447,"unit":"pcs","tax":false,"cost_code":"","total":47389},
+        {"id":"i-7","type":"SUB","name":"Android Test Item","qty":5,"unit_cost":2100,"unit":"kg","tax":false,"cost_code":"","total":46620},
+        {"id":"i-8","type":"SUB","name":"Billing Item","qty":5,"unit_cost":725,"unit":"55","tax":false,"cost_code":"Automatic Fire Suppression Systems","total":16095},
+        {"id":"i-9","type":"Other","name":"Ceramic tile: 30cm x 30cm - 7mm thick","qty":5,"unit_cost":23015,"unit":"m2","tax":false,"cost_code":"","total":127733},
+        {"id":"i-10","type":"Other","name":"Ceramic tile: 30cm x 30cm - 10mm thick","qty":5,"unit_cost":35014,"unit":"m2","tax":false,"cost_code":"","total":194328}
+      ]
+    },
+    {
+      "id": "sec-2",
+      "name": "Final Section",
+      "items": [
+        {"id":"i-11","type":"LBR","name":"Manual Item","qty":10,"unit_cost":20000,"unit":"Hrs","tax":true,"cost_code":"000 - 15-April-2023 Beta - 00","total":1310000}
+      ]
+    }
+  ]
+}
