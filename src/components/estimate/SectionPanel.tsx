@@ -2,7 +2,7 @@ import React from "react";
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "../ui/badge";
 import type { UISection } from "./types";
 import { ItemRow } from "./ItemRow";
 
