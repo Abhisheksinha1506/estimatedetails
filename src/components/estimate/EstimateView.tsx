@@ -12,35 +12,51 @@ interface ApiItem {
   type?: string;
   name?: string;
   item_name?: string;
+  subject?: string;
+  item_id?: string;
   qty?: number;
-  quantity?: number;
-  unit_cost?: number; // cents
-  unitCost?: number;  // cents (alt key)
+  quantity?: number | string;
+  unit_cost?: number | string; // cents
+  unitCost?: number | string;  // cents (alt key)
+  modified_unit_cost?: number | string; // cents (alt)
   unit?: string;
   unit_name?: string;
-  tax?: boolean;
-  is_taxable?: boolean;
+  tax?: boolean | string | number;
+  is_taxable?: boolean | string | number;
+  apply_global_tax?: string | number;
   cost_code?: string;
   costCode?: string;
-  total?: number; // cents
+  cost_code_name?: string;
+  item_type_display_name?: string;
+  item_type_name?: string;
+  total?: number | string; // cents
 }
 
 interface ApiSection {
-  id: string;
+  id?: string;
+  section_id?: string;
   name?: string;
   title?: string;
+  section_name?: string;
   items?: ApiItem[];
 }
 
-interface ApiResponse {
+interface ApiEnvelope {
   section?: ApiSection[];
   sections?: ApiSection[];
+  data?: {
+    section?: ApiSection[];
+    sections?: ApiSection[];
+  };
 }
 
 import type { UIItem, UISection } from "./types";
 // currency formatter moved to ./types
 
-const divideCents = (value: number | undefined) => (typeof value === "number" ? value / 100 : 0);
+const divideCents = (value: number | string | undefined | null) => {
+  const num = typeof value === "string" ? Number(value) : typeof value === "number" ? value : 0;
+  return Number.isFinite(num) ? num / 100 : 0;
+};
 
 export default function EstimateView() {
   const [sections, setSections] = useState<UISection[]>([]);
@@ -74,23 +90,41 @@ export default function EstimateView() {
     async function load() {
       try {
         setLoading(true);
-        const res = await fetch("/data/estimate.json", { cache: "no-store" });
+        const primaryUrl = "/data/React JS- Estimate_detail (1).json";
+        const fallbackUrl = "/data/estimate.json";
+
+        let res = await fetch(encodeURI(primaryUrl), { cache: "no-store" });
+        if (!res.ok) {
+          res = await fetch(fallbackUrl, { cache: "no-store" });
+        }
         if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
-        const data: ApiResponse = await res.json();
+        const data: ApiEnvelope = await res.json();
         if (ignore) return;
-        const rawSections = data.section ?? data.sections ?? [];
+
+        const rawSections: ApiSection[] = (
+          data.section ??
+          data.sections ??
+          data.data?.section ??
+          data.data?.sections ??
+          []
+        );
+
         const mapped: UISection[] = rawSections.map((s, i) => ({
-          id: s.id ?? `sec-${i + 1}`,
-          name: s.name ?? s.title ?? `Section ${i + 1}`,
+          id: s.id ?? s.section_id ?? `sec-${i + 1}`,
+          name: s.name ?? s.title ?? s.section_name ?? `Section ${i + 1}`,
           items: (s.items ?? []).map((it, j) => ({
-            id: it.id ?? `${i + 1}-${j + 1}`,
-            type: it.type ?? "",
-            name: it.name ?? it.item_name ?? "",
+            id: it.id ?? it.item_id ?? `${i + 1}-${j + 1}`,
+            type: it.type ?? it.item_type_display_name ?? it.item_type_name ?? "",
+            name: it.name ?? it.item_name ?? it.subject ?? "",
             qty: Number(it.qty ?? it.quantity ?? 0),
             unit: it.unit ?? it.unit_name ?? "",
-            unitCost: divideCents(it.unit_cost ?? it.unitCost),
-            tax: Boolean(it.tax ?? it.is_taxable ?? false),
-            costCode: it.cost_code ?? it.costCode ?? "",
+            unitCost: divideCents(it.unit_cost ?? it.unitCost ?? it.modified_unit_cost),
+            tax: Boolean(
+              it.tax ??
+              it.is_taxable ??
+              (it.apply_global_tax === '1' || it.apply_global_tax === 1)
+            ),
+            costCode: it.cost_code ?? it.costCode ?? it.cost_code_name ?? "",
           })),
         }));
         setSections(mapped);
@@ -176,18 +210,28 @@ export default function EstimateView() {
       <div className="container py-4 sm:py-6 lg:py-8 mt-6">
         <Separator className="mb-4 sm:mb-6" />
 
-        <Accordion type="multiple" className="w-full space-y-2" value={openSections} onValueChange={(v) => setOpenSections(Array.isArray(v) ? v : [])}>
-          {sections.map((sec) => (
-            <SectionPanel
-              key={sec.id}
-              section={sec}
-              currency={currency}
-              sectionTotal={sectionTotal}
-              updateQty={updateQty}
-              updateUnitCost={updateUnitCost}
-            />
-          ))}
-        </Accordion>
+        <div className="h-[700px] overflow-y-auto pr-2">
+          {sections.length === 0 ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center">
+                <p className="text-lg text-muted-foreground">No information to display</p>
+              </div>
+            </div>
+          ) : (
+            <Accordion type="multiple" className="w-full space-y-2 p-4" value={openSections} onValueChange={(v) => setOpenSections(Array.isArray(v) ? v : [])}>
+              {sections.map((sec) => (
+                <SectionPanel
+                  key={sec.id}
+                  section={sec}
+                  currency={currency}
+                  sectionTotal={sectionTotal}
+                  updateQty={updateQty}
+                  updateUnitCost={updateUnitCost}
+                />
+              ))}
+            </Accordion>
+          )}
+        </div>
       </div>
     </main>
   );

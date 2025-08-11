@@ -34,7 +34,7 @@ export function ItemRow({
           inputMode="numeric"
           type="number"
           className="h-8 xl:h-9 text-right text-sm"
-          value={Number.isFinite(item.qty) ? item.qty : 0}
+          value={Number.isFinite(item.qty) && item.qty > 0 ? (item.qty > 10 ? item.qty.toString() : item.qty) : ''}
           onChange={(e) => updateQty(sectionId, item.id, Number(e.target.value))}
           onKeyUp={(e) => updateQty(sectionId, item.id, Number((e.target as HTMLInputElement).value))}
           min={0}
@@ -58,7 +58,7 @@ export function ItemRow({
       <TableCell className="text-right p-2 xl:p-3 font-medium">{currency.format(itemTotal)}</TableCell>
       <TableCell className="text-center p-2 xl:p-3">
         {item.tax ? (
-          <Badge variant="secondary" className="text-xs">Tax</Badge>
+          <span className="text-green-600 text-sm">✓</span>
         ) : (
           <span aria-hidden className="text-muted-foreground">—</span>
         )}

@@ -1,8 +1,9 @@
-const CACHE_NAME = 'estimate-details-v1';
+const CACHE_NAME = 'estimate-details-v2';
 const urlsToCache = [
   '/',
   '/static/css/main.css',
   '/static/js/main.js',
+  '/data/React JS- Estimate_detail (1).json',
   '/data/estimate.json'
 ];
 
