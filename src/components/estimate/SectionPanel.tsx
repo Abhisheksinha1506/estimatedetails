@@ -29,7 +29,7 @@ export function SectionPanel({
       </AccordionTrigger>
       <AccordionContent>
         {/* Mobile Card Layout */}
-        <div className="block lg:hidden space-y-3 p-2 sm:p-3">
+        <div className="block lg:hidden space-y-3 p-2 sm:p-3 max-h-[500px] overflow-y-auto">
           {section.items.map((it) => (
             <div key={it.id} className="border rounded-lg p-3 space-y-3 bg-card">
               <div className="flex items-start justify-between">
@@ -78,8 +78,10 @@ export function SectionPanel({
               </div>
 
               {it.costCode && (
-                <div>
-                  <Badge variant="outline" className="text-xs max-w-full truncate">{it.costCode}</Badge>
+                <div className="w-full">
+                  <Badge variant="outline" className="text-xs max-w-full truncate block" title={it.costCode}>
+                    <span className="truncate max-w-[120px] block">{it.costCode}</span>
+                  </Badge>
                 </div>
               )}
             </div>
@@ -87,7 +89,7 @@ export function SectionPanel({
         </div>
 
         {/* Desktop Table Layout */}
-        <div className="hidden lg:block overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto max-h-[600px] overflow-y-auto">
           <Table>
             <TableHeader className="sticky top-0 z-10 bg-background">
               <TableRow>

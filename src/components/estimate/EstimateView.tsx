@@ -171,7 +171,7 @@ export default function EstimateView() {
         onCollapseAll={() => setOpenSections([])}
       />
 
-      <div className="container py-4 sm:py-6 lg:py-8">
+      <div className="container py-4 sm:py-6 lg:py-8 mt-6">
         <Separator className="mb-4 sm:mb-6" />
 
         <Accordion type="multiple" className="w-full space-y-2" value={openSections} onValueChange={(v) => setOpenSections(Array.isArray(v) ? v : [])}>

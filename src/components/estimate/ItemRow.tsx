@@ -63,8 +63,12 @@ export function ItemRow({
           <span aria-hidden className="text-muted-foreground">—</span>
         )}
       </TableCell>
-      <TableCell className="p-2 xl:p-3 max-w-0" title={item.costCode}>
-        {item.costCode ? <Badge variant="outline" className="max-w-full truncate text-xs">{item.costCode}</Badge> : ""}
+      <TableCell className="p-2 xl:p-3 max-w-[180px]" title={item.costCode}>
+        {item.costCode ? (
+          <Badge variant="outline" className="max-w-full truncate text-xs block">
+            <span className="truncate max-w-[140px] block">{item.costCode}</span>
+          </Badge>
+        ) : ""}
       </TableCell>
       <TableCell className="text-right p-2 xl:p-3">
         <Eye className="inline-block h-3 w-3 xl:h-4 xl:w-4 text-muted-foreground" aria-hidden />
