@@ -48,23 +48,25 @@ export default function EstimateView() {
   const [error, setError] = useState<string | null>(null);
   const [openSections, setOpenSections] = useState<string[]>([]);
 
-  // SEO: page title, meta description, canonical
+  // SEO: structured data
   useEffect(() => {
-    document.title = "Estimate - Live Totals";
-    const meta = document.querySelector('meta[name="description"]') || (() => {
-      const m = document.createElement('meta');
-      m.setAttribute('name', 'description');
-      document.head.appendChild(m);
-      return m;
-    })();
-    meta.setAttribute('content', 'Estimate sections with inline editing, instant totals, and grand total.');
-    const canonical = document.querySelector('link[rel="canonical"]') || (() => {
-      const l = document.createElement('link');
-      l.setAttribute('rel', 'canonical');
-      document.head.appendChild(l);
-      return l;
-    })();
-    canonical.setAttribute('href', window.location.href);
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Estimate Details",
+      "description": "Interactive estimate sections with inline editing and real-time grand totals",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser"
+    };
+    
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(structuredData);
+    document.head.appendChild(script);
+    
+    return () => {
+      document.head.removeChild(script);
+    };
   }, []);
 
   useEffect(() => {

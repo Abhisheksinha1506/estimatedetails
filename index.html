@@ -6,6 +6,9 @@
     <title>Estimate_Details</title>
     <meta name="description" content="Interactive estimate sections with inline editing and real-time grand totals." />
     <meta name="author" content="Lovable" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="canonical" href="https://estimate-details.lovable.app/" />
 
     <meta property="og:title" content="Estimate_Details" />
     <meta property="og:description" content="Interactive estimate sections with inline editing and real-time grand totals." />
@@ -20,5 +23,12 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      }
+    </script>
   </body>
 </html>

@@ -16,7 +16,7 @@ export function EstimateHeader({
         {/* Mobile Layout */}
         <div className="block lg:hidden space-y-3">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl sm:text-2xl font-semibold">Estimate</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold">Estimate Details</h1>
             <div className="text-right">
               <div className="text-xs text-muted-foreground">Grand Total</div>
               <div className="text-lg sm:text-xl font-bold">{new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(grandTotal)}</div>
@@ -40,7 +40,7 @@ export function EstimateHeader({
         {/* Desktop Layout */}
         <div className="hidden lg:flex items-end justify-between">
           <div>
-            <h1 className="text-3xl font-semibold">Estimate</h1>
+            <h1 className="text-3xl font-semibold">Estimate Details</h1>
             <p className="text-sm text-muted-foreground">Inline editable quantities and unit costs with instant totals.</p>
           </div>
           <div className="flex items-end gap-6">
