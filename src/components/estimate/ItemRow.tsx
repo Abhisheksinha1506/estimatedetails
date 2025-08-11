@@ -22,18 +22,18 @@ export function ItemRow({
 
   return (
     <TableRow className="odd:bg-muted/30 hover:bg-muted/50">
-      <TableCell className="font-mono text-xs">{item.type}</TableCell>
-      <TableCell>
-        <div className="flex flex-col">
-          <span>{item.name}</span>
+      <TableCell className="font-mono text-xs p-2 xl:p-3">{item.type}</TableCell>
+      <TableCell className="p-2 xl:p-3">
+        <div className="flex flex-col min-w-0">
+          <span className="truncate" title={item.name}>{item.name}</span>
         </div>
       </TableCell>
-      <TableCell className="text-right">
+      <TableCell className="text-right p-2 xl:p-3">
         <Input
           aria-label={`Quantity for ${item.name}`}
           inputMode="numeric"
           type="number"
-          className="h-9 text-right"
+          className="h-8 xl:h-9 text-right text-sm"
           value={Number.isFinite(item.qty) ? item.qty : 0}
           onChange={(e) => updateQty(sectionId, item.id, Number(e.target.value))}
           onKeyUp={(e) => updateQty(sectionId, item.id, Number((e.target as HTMLInputElement).value))}
@@ -41,12 +41,12 @@ export function ItemRow({
           step={1}
         />
       </TableCell>
-      <TableCell className="text-right">
+      <TableCell className="text-right p-2 xl:p-3">
         <Input
           aria-label={`Unit cost for ${item.name}`}
           inputMode="decimal"
           type="number"
-          className="h-9 text-right"
+          className="h-8 xl:h-9 text-right text-sm"
           value={Number.isFinite(item.unitCost) ? item.unitCost : 0}
           onChange={(e) => updateUnitCost(sectionId, item.id, Number(e.target.value))}
           onKeyUp={(e) => updateUnitCost(sectionId, item.id, Number((e.target as HTMLInputElement).value))}
@@ -54,20 +54,20 @@ export function ItemRow({
           step={0.01}
         />
       </TableCell>
-      <TableCell>{item.unit}</TableCell>
-      <TableCell className="text-right">{currency.format(itemTotal)}</TableCell>
-      <TableCell className="text-center">
+      <TableCell className="p-2 xl:p-3 text-sm">{item.unit}</TableCell>
+      <TableCell className="text-right p-2 xl:p-3 font-medium">{currency.format(itemTotal)}</TableCell>
+      <TableCell className="text-center p-2 xl:p-3">
         {item.tax ? (
-          <Badge variant="secondary">Tax</Badge>
+          <Badge variant="secondary" className="text-xs">Tax</Badge>
         ) : (
-          <span aria-hidden>—</span>
+          <span aria-hidden className="text-muted-foreground">—</span>
         )}
       </TableCell>
-      <TableCell className="truncate" title={item.costCode}>
-        {item.costCode ? <Badge variant="outline" className="max-w-[180px] truncate">{item.costCode}</Badge> : ""}
+      <TableCell className="p-2 xl:p-3 max-w-0" title={item.costCode}>
+        {item.costCode ? <Badge variant="outline" className="max-w-full truncate text-xs">{item.costCode}</Badge> : ""}
       </TableCell>
-      <TableCell className="text-right">
-        <Eye className="inline-block h-4 w-4" aria-hidden />
+      <TableCell className="text-right p-2 xl:p-3">
+        <Eye className="inline-block h-3 w-3 xl:h-4 xl:w-4 text-muted-foreground" aria-hidden />
       </TableCell>
     </TableRow>
   );

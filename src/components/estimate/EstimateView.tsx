@@ -164,27 +164,29 @@ export default function EstimateView() {
   }
 
   return (
-    <main className="container py-8 space-y-6">
+    <main className="min-h-screen">
       <EstimateHeader
         grandTotal={grandTotal}
         onExpandAll={() => setOpenSections(sections.map((s) => s.id))}
         onCollapseAll={() => setOpenSections([])}
       />
 
-      <Separator />
+      <div className="container py-4 sm:py-6 lg:py-8">
+        <Separator className="mb-4 sm:mb-6" />
 
-      <Accordion type="multiple" className="w-full" value={openSections} onValueChange={(v) => setOpenSections(Array.isArray(v) ? v : [])}>
-        {sections.map((sec) => (
-          <SectionPanel
-            key={sec.id}
-            section={sec}
-            currency={currency}
-            sectionTotal={sectionTotal}
-            updateQty={updateQty}
-            updateUnitCost={updateUnitCost}
-          />
-        ))}
-      </Accordion>
+        <Accordion type="multiple" className="w-full space-y-2" value={openSections} onValueChange={(v) => setOpenSections(Array.isArray(v) ? v : [])}>
+          {sections.map((sec) => (
+            <SectionPanel
+              key={sec.id}
+              section={sec}
+              currency={currency}
+              sectionTotal={sectionTotal}
+              updateQty={updateQty}
+              updateUnitCost={updateUnitCost}
+            />
+          ))}
+        </Accordion>
+      </div>
     </main>
   );
 }
