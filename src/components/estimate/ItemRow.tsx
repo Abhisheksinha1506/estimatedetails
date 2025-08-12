@@ -71,7 +71,7 @@ export function ItemRow({
         ) : ""}
       </TableCell>
       <TableCell className="text-right p-2 xl:p-3">
-        <Eye className="inline-block h-3 w-3 xl:h-4 xl:w-4 text-muted-foreground" aria-hidden />
+        <Eye className="inline-block h-4 w-4 xl:h-5 xl:w-5 text-green-600" aria-hidden />
       </TableCell>
     </TableRow>
   );

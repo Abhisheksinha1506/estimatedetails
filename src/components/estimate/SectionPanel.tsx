@@ -35,7 +35,7 @@ export function SectionPanel({
               <p className="text-muted-foreground">No items to display</p>
             </div>
           ) : (
-            <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+            <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 pb-6">
               {section.items.map((it) => (
                 <div key={it.id} className="border rounded-lg p-3 space-y-3 bg-card">
                   <div className="flex items-start justify-between">
@@ -104,7 +104,7 @@ export function SectionPanel({
                 <p className="text-muted-foreground">No items to display</p>
               </div>
             ) : (
-              <div className="max-h-[500px] overflow-y-auto">
+              <div className="max-h-[500px] overflow-y-auto pb-6">
                 <Table>
                   <TableHeader className="sticky top-0 z-10 bg-background border-b">
                     <TableRow>

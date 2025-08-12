@@ -1,73 +1,140 @@
-# Welcome to your Lovable project
+# Estimate Details - Interactive Construction Estimate Management
 
-## Project info
+## Project Overview
 
-**URL**: https://lovable.dev/projects/00928b35-a89f-4094-814e-40eb5fe48581
+**Estimate Details** is a modern, interactive web application for managing construction estimates with real-time calculations and inline editing capabilities. Built with React and TypeScript, it provides a professional interface for contractors and project managers to view, edit, and manage detailed cost breakdowns.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- **Interactive Estimate Management**: View and edit construction estimates with real-time updates
+- **Inline Editing**: Modify quantities and unit costs directly in the table with immediate feedback
+- **Real-time Calculations**: Automatic updates of section totals and grand totals as you type
+- **Responsive Design**: Optimized for both desktop and mobile devices
+- **Section Organization**: Clean accordion-based layout for easy navigation through estimate sections
+- **Professional UI**: Modern interface built with shadcn/ui components and Tailwind CSS
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/00928b35-a89f-4094-814e-40eb5fe48581) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
+## Technologies Used
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **React 18** - Modern React with hooks and functional components
+- **TypeScript** - Type-safe development
+- **Vite** - Fast build tool and development server
+- **shadcn/ui** - Beautiful, accessible UI components
+- **Tailwind CSS** - Utility-first CSS framework
+- **Lucide React** - Beautiful icons
+- **React Query** - Data fetching and state management
 
-## How can I deploy this project?
+## Project Structure
 
-Simply open [Lovable](https://lovable.dev/projects/00928b35-a89f-4094-814e-40eb5fe48581) and click on Share -> Publish.
+```
+src/
+├── components/
+│   ├── estimate/          # Estimate-specific components
+│   │   ├── EstimateHeader.tsx
+│   │   ├── EstimateView.tsx
+│   │   ├── ItemRow.tsx
+│   │   ├── SectionPanel.tsx
+│   │   └── types.ts
+│   └── ui/               # Reusable UI components
+├── pages/                # Page components
+├── hooks/                # Custom React hooks
+└── lib/                  # Utility functions
+```
 
-## Can I connect a custom domain to my Lovable project?
+## How to Run the Project
 
-Yes, you can!
+### Prerequisites
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- **Node.js** (version 18 or higher)
+- **npm** or **yarn** package manager
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Installation Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone <YOUR_GIT_URL>
+   cd estimatedetails
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Start the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. **Open your browser**
+   Navigate to `http://localhost:5173` to view the application
+
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm run type-check` - Run TypeScript type checking
+
+## Data Structure
+
+The application loads estimate data from JSON files containing:
+
+- **Sections**: Major project divisions (e.g., "03.02 Framing - Deck")
+- **Items**: Individual line items within each section
+- **Properties**: Quantity, unit cost, unit of measurement, tax status, cost codes
+- **Calculations**: Automatic totals with markup and tax considerations
+
+## Key Components
+
+- **EstimateView**: Main application component that loads and manages estimate data
+- **SectionPanel**: Displays individual sections with collapsible accordion functionality
+- **ItemRow**: Renders individual line items with inline editing capabilities
+- **EstimateHeader**: Shows grand total and global actions (expand/collapse all)
+
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## Development
+
+### Code Style
+- TypeScript for type safety
+- ESLint for code quality
+- Prettier for code formatting
+- Tailwind CSS for styling
+
+### State Management
+- React hooks for local state
+- React Query for data fetching
+- Callback functions for data updates
+
+## Deployment
+
+The project can be deployed using:
+
+- **Lovable Platform**: Click Share → Publish in the Lovable interface
+- **Vercel**: Connect your GitHub repository for automatic deployments
+- **Netlify**: Drag and drop the `dist` folder after building
+- **Traditional hosting**: Upload the built files to any web server
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is proprietary and confidential.

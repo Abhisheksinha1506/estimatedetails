@@ -210,7 +210,7 @@ export default function EstimateView() {
       <div className="container py-4 sm:py-6 lg:py-8 mt-6">
         <Separator className="mb-4 sm:mb-6" />
 
-        <div className="h-[700px] overflow-y-auto pr-2">
+        <div className="max-h-[55vh] sm:max-h-[60vh] md:max-h-[65vh] lg:max-h-[70vh] xl:max-h-[75vh] overflow-y-auto pr-2 pb-8 relative">
           {sections.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center">
@@ -218,18 +218,30 @@ export default function EstimateView() {
               </div>
             </div>
           ) : (
-            <Accordion type="multiple" className="w-full space-y-2 p-4" value={openSections} onValueChange={(v) => setOpenSections(Array.isArray(v) ? v : [])}>
-              {sections.map((sec) => (
-                <SectionPanel
-                  key={sec.id}
-                  section={sec}
-                  currency={currency}
-                  sectionTotal={sectionTotal}
-                  updateQty={updateQty}
-                  updateUnitCost={updateUnitCost}
-                />
-              ))}
-            </Accordion>
+            <>
+              {/* Main Table Headers */}
+              <div className="hidden lg:block sticky top-0 z-50">
+                <div className="border rounded-lg overflow-hidden bg-background shadow-sm">
+                  <div className="grid grid-cols-2 gap-2 p-4 font-medium border-b">
+                    <div className="whitespace-nowrap pl-4 font-medium text-base">Section</div>
+                    <div className="w-[140px] text-right mr-4 justify-self-end font-medium text-base">Unit Cost per Item</div>
+                  </div>
+                </div>
+              </div>
+              
+              <Accordion type="multiple" className="w-full space-y-1 p-4" value={openSections} onValueChange={(v) => setOpenSections(Array.isArray(v) ? v : [])}>
+                {sections.map((sec) => (
+                  <SectionPanel
+                    key={sec.id}
+                    section={sec}
+                    currency={currency}
+                    sectionTotal={sectionTotal}
+                    updateQty={updateQty}
+                    updateUnitCost={updateUnitCost}
+                  />
+                ))}
+              </Accordion>
+            </>
           )}
         </div>
       </div>
